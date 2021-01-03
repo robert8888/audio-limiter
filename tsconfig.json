@@ -13,9 +13,18 @@
     // Disallow features that require cross-file information for emit.
     "isolatedModules": true,
     // Import non-ES modules as default imports.
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    "declaration": true,
+    //"emitDeclarationOnly": true,
+    "types": ["@types/jest", "node"],
+
+    "lib": [
+      "es2016",
+      "dom"
+    ]
   },
   "include": [
-    "src"
+    "src", "test/*.ts", "test/**/*"
   ]
 }
