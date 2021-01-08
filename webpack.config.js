@@ -3,21 +3,19 @@ const LastCallWebpackPlugin = require('last-call-webpack-plugin');
 
 module.exports = [{
     mode: 'production',
-    entry: ['./src/processor.ts'],
+    entry: ['./src/LimiterWorkletProcessor.ts'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'limiter-audio-worklet-processor.js',
-        library: 'limiter-audio-worklet-processor',
-        libraryTarget: 'umd',
-        libraryExport: 'default',
-        globalObject: 'this',
+
+        module: true
     },
 
     module: {
         rules: [{
             // Include ts, tsx, js, and jsx files.
             test: /\.(ts|js)x?$/,
-            exclude: /node_modules/,
+            exclude: [/node_modules/],
             use: [{
                 loader: 'babel-loader',
                 options: {presets: ["@babel/preset-env"]}
@@ -30,9 +28,10 @@ module.exports = [{
                 phase: 'emit',
                 regExp:  /\.(ts|js)x?$/,
                 processor: (assetName, asset, assets)  => {
+                   // assets.setAsset(assetName, null);
                     assets.setAsset(
                         assetName.split(".")[0] + '-module.js', 
-                        `module.exports='${asset.source().replace(/'/gm, "\\'")}'`
+                        `export const worklet = '${asset.source().replace(/'/gm, "\\'")}'`
                     );
                     return Promise.resolve();
                 } 
@@ -44,9 +43,12 @@ module.exports = [{
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ],
     },
+    experiments: {
+		outputModule: true
+	}
 }, {
     mode: 'production',
-    entry: ['./src/loader.ts'],
+    entry: ['./src/createLimiter.ts'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'limiter-audio-loader.js',
