@@ -9,7 +9,7 @@ const parameters = [
         name: "release",
         minValue: 0,
         maxValue: 2,
-        defaultValue: 0.2,
+        defaultValue: 0.1,
     },
     {
         name: "threshold",

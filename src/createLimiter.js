@@ -42,7 +42,7 @@ function normalizeOptions(options) {
     const time = options?.time || 0.005;
     delete options?.time;
     const channelCount = options?.channelCount || 2;
-    const outputChannelCount = [2];
+    const outputChannelCount = [channelCount];
     return { ...options,
         channelCountMode: "explicit",
         channelCount,

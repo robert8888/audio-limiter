@@ -9,7 +9,7 @@ const parameters: Array<AudioParamDescriptor> = [
         name: "release", // time in s 
         minValue: 0,
         maxValue: 2,
-        defaultValue: 0.2,
+        defaultValue: 0.1,
     },
     <AudioParamDescriptor>{
         name: "threshold", // in dB
