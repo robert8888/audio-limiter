@@ -28,6 +28,13 @@ const parameters: Array<AudioParamDescriptor> = [
         minValue: -100,
         maxValue: 100,
         defaultValue: 0,
-    }]
+    },
+    <AudioParamDescriptor>{
+        name: "bypass", // boolean
+        minValue: 0,
+        maxValue: 1,
+        defaultValue: 0,
+    }
+]
 
     export default parameters;

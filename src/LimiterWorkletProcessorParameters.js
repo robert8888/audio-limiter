@@ -28,6 +28,12 @@ const parameters = [
         minValue: -100,
         maxValue: 100,
         defaultValue: 0,
+    },
+    {
+        name: "bypass",
+        minValue: 0,
+        maxValue: 1,
+        defaultValue: 0,
     }
 ];
 export default parameters;

@@ -1,4 +1,4 @@
-import {IAudioWorkletProcessor} from "./types/ProcessorTypes";
+import {IAudioWorkletProcessor} from "./LimiterWorkletProcessorTypes";
 import parameterDescriptors from "./LimiterWorkletProcessorParameters";
 import {ampToDB, dBToAmp} from "./utils/dBTransforms";
 import DelayBuffer from "./DelayBuffer";
@@ -81,6 +81,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
         const threshold = parameters.threshold[0] || 0;
         const attack = parameters.attack[0] || 0;
         const release = parameters.release[0] || 0;
+        const bypass = parameters.bypass[0] || 0;
 
         for(let channel = 0; channel < input.length; channel++){
             const length = input[channel].length;
@@ -97,12 +98,12 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
                     output[channel][i] = this.buffers[channel].read();
                 }
             }
-            
-            for(let i = 0; i < length; i++){
-                const gainDB = Math.min(threshold - ampToDB(envelope[i]), 0);
-                const gainAmp = dBToAmp(gainDB);
-                output[channel][i] *= (gainAmp * postGainAmp); 
-            }
+            if(!bypass)
+                for(let i = 0; i < length; i++){
+                    const gainDB = Math.min(threshold - ampToDB(envelope[i]), 0);
+                    const gainAmp = dBToAmp(gainDB);
+                    output[channel][i] *= (gainAmp * postGainAmp); 
+                }
         }
 
         return true;

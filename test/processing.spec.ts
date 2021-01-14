@@ -1,5 +1,6 @@
 import "@babel/polyfill";
 import "../src/createLimiter";
+import { LimiterAudioWorkletNode } from "../src/LimiterAudioWorkletNode";
 import compareAudioBuffers from "./utils/compareAudioBuffers";
 import connectInChain from "./utils/connectNodesInChain";
 import createContextBootstrap from "./utils/createContextBootstrap";
@@ -206,6 +207,27 @@ describe('Processing audio - limiting', () => {
       })
 
       offlineAudioContextOptions.length = .5 * 44100; // back to .5 seconds
+    })
+
+    it("Should switch to bypass mode", async () => {
+      offlineAudioContextOptions.length = .5 * offlineAudioContextOptions.sampleRate; // 5 seconds
+        //@ts-ignore
+      const renderBufferGenerator = <AsyncIterator>renderBufferAudio(offlineAudioContextOptions);
+      await renderBufferGenerator.next();
+      const bufferSource = new Float32Array(44100).fill(5)
+      const limiter = <LimiterAudioWorkletNode>(await renderBufferGenerator.next(bufferSource)).value;
+
+      limiter.bypass.setValueAtTime(0.1, 0.25);
+
+      const outputBuffer = (await renderBufferGenerator.next()).value;
+      const data = outputBuffer.getChannelData(0);
+
+      const frameSize = 128
+      const bypassIndex = 0.25 * offlineAudioContextOptions.sampleRate
+      const limited = data.slice(0, bypassIndex - frameSize); // 
+      const bypassed = data.slice(bypassIndex + frameSize);
+      expect(limited.every(sample => sample > -1  && sample <= 1)).toBeTrue();
+      expect(bypassed.every(sample => sample === 5)).toBeTrue();
     })
 
 })

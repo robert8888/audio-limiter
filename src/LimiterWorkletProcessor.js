@@ -51,6 +51,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor {
         const threshold = parameters.threshold[0] || 0;
         const attack = parameters.attack[0] || 0;
         const release = parameters.release[0] || 0;
+        const bypass = parameters.bypass[0] || 0;
         for (let channel = 0; channel < input.length; channel++) {
             const length = input[channel].length;
             for (let i = 0; i < length; i++) {
@@ -63,11 +64,12 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor {
                     output[channel][i] = this.buffers[channel].read();
                 }
             }
-            for (let i = 0; i < length; i++) {
-                const gainDB = Math.min(threshold - ampToDB(envelope[i]), 0);
-                const gainAmp = dBToAmp(gainDB);
-                output[channel][i] *= (gainAmp * postGainAmp);
-            }
+            if (!bypass)
+                for (let i = 0; i < length; i++) {
+                    const gainDB = Math.min(threshold - ampToDB(envelope[i]), 0);
+                    const gainAmp = dBToAmp(gainDB);
+                    output[channel][i] *= (gainAmp * postGainAmp);
+                }
         }
         return true;
     }
