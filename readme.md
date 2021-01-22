@@ -3,6 +3,9 @@
 This library extending built in browser AudioContext and OfflineAudioContext 
 by createLimiter() function. 
 
+## **[DEMO PAGE](https://robert8888.github.io/limiter-audio-synth-demo)**
+
+
 ## Installation 
 ```
 npm install audio-limiter
@@ -52,9 +55,11 @@ oscillator.connect(gain)
 gain.connect(limiter);
 limiter.connect(context.destination);
 
+limiter.isReady.then(() => {
+    limiter.attack.setValueAtTime(0.1, 10)// set value 100ms in 10 second
+    limiter.bypass.setValueAtTime(1, 20)// any not zero value will activate bypass
+})
 
-limiter.attack.setValueAtTime(0.1, 10)// set value 100ms in 10 second
-limiter.bypass.setValueAtTime(1, 20)// any not zero value active bypass
 
 ```
 

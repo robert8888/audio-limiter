@@ -1,9 +1,10 @@
 {
   "name": "audio-limiter",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "limiter audio worklet node ",
   "main": "dist/limiter-audio-loader.js",
   "repository": "https://github.com/robert8888/audio-limiter",
+  "homepage": " https://robert8888.github.io/limiter-audio-synth-demo",
   "scripts": {
     "type-check": "tsc",
     "type-check:watch": "npm run type-check -- --watch",
