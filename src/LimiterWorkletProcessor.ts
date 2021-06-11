@@ -10,7 +10,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
     //currentTime, sampleRater, currentFrame
     private time: number;
     private buffers: DelayBuffer[];
-    private sampleEnvelope: number;
+    private sampleEnvelope: number[];
 
     public static get parameterDescriptors() { return parameterDescriptors };
 
@@ -49,10 +49,10 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
         this.buffers = new Array<DelayBuffer>(channelCount || outputChannelCount[0])
             .fill(new DelayBuffer(0)).map(() => new DelayBuffer(~~(contextSampleRate * this.time)))
 
-        this.sampleEnvelope = 0;
+        this.sampleEnvelope = new Array(channelCount || outputChannelCount[0]).fill(0);
     }
 
-    private getEnvelope(output: Float32Array, attackTime: number, releaseTime: number): Float32Array{
+    private getEnvelope(output: Float32Array, attackTime: number, releaseTime: number, sampleEnvelope = 0): Float32Array{
         const envelope = new Float32Array(output.length);
 
         const attackGain = Math.exp(-1 / (contextSampleRate * attackTime));
@@ -61,12 +61,12 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
 
         for(let i = 0; i < output.length; i++){
             const inputEnvelope = Math.abs(output[i]);
-            if(this.sampleEnvelope < inputEnvelope){
-                this.sampleEnvelope = inputEnvelope + attackGain * (this.sampleEnvelope - inputEnvelope);
+            if(sampleEnvelope < inputEnvelope){
+                sampleEnvelope = inputEnvelope + attackGain * (sampleEnvelope - inputEnvelope);
             } else {
-                this.sampleEnvelope = inputEnvelope + releaseGain * (this.sampleEnvelope - inputEnvelope)
+                sampleEnvelope = inputEnvelope + releaseGain * (sampleEnvelope - inputEnvelope)
             }
-            envelope[i] = this.sampleEnvelope;
+            envelope[i] = sampleEnvelope;
         }
 
         return envelope;
@@ -90,7 +90,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
                 output[channel][i] = input[channel][i] * preGainAmp;
             }
 
-            const envelope = this.getEnvelope(output[channel], attack, release);
+            const envelope = this.getEnvelope(output[channel], attack, release, this.sampleEnvelope[0]);
 
             if(this.time > 0){
                 for(let i = 0; i < length; i++){
