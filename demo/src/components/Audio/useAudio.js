@@ -1,5 +1,5 @@
 import {useCallback, useContext} from "preact/compat";
-import BusAudioContext from "./audioContext";
+import BusAudioContext from "./AudioContext";
 
 export default function useAudio(){
     const data = useContext(BusAudioContext)
