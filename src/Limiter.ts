@@ -1,8 +1,9 @@
 import { IConnectable } from "./AudioNodePatch";
 import { LimiterAudioWorkletNode } from "./LimiterAudioWorkletNode";
 import { LimiterAudioNodeOptions, validateLimiterNodeOptions } from "./LimiterAudioNodeOptions";
-
+import LimiterWorkletProcessorParameters from "./LimiterWorkletProcessorParameters";
 import "./AudioNodePatch";
+
 
 
 
@@ -158,5 +159,7 @@ export default class LimiterNode extends EventTarget implements IConnectable, Au
         return (<LimiterAudioWorkletNode>this._limiter).bypass;
     }
 
-
+    static get parametersList(): Array<AudioParamDescriptor> {
+        return LimiterWorkletProcessorParameters
+    }
 }
