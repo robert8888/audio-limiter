@@ -37,4 +37,4 @@ const parameters: Array<AudioParamDescriptor> = [
     }
 ]
 
-    export default parameters;
+export default parameters;

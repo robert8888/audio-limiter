@@ -1,5 +1,7 @@
-/node_moduels
+/node_modules
 node_modules/
+demo/node_modules
+/demo/node_modules
 /dist
 /src/**/*.js
 src/*.js

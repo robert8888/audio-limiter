@@ -1,0 +1,12 @@
+.media-element{
+  width: 600px;
+  &__urls{
+    width: 100%;
+  }
+  &__source-group{
+    display: flex;
+  }
+  &__source-input{
+    width: 100%;
+  }
+}

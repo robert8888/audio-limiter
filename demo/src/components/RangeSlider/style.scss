@@ -1,0 +1,53 @@
+.range-slider{
+  width: 80px;
+  height: 200px;
+  &__area{
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 400px;
+
+    background:
+      linear-gradient(to left, transparent 1px, #444 3px, transparent 5px) no-repeat center top,
+      linear-gradient(to bottom, #444 0px, transparent 1px) repeat-y center top,
+      linear-gradient(to bottom, #444 0px, transparent 1px) repeat-y center 10px;
+    background-size: 5px 100%, 15% 20px, 10% 20px;
+    background-color: #DDD;
+    border-radius: 3px;
+    box-shadow: 0 0 10px 0 #AAA inset;
+  }
+
+  &__thumb{
+    width: 80%;
+    margin: 0 auto;
+    height: 1rem;
+    background: #EEE;
+    border-radius: 5%;
+    border: 1px solid #AAA;
+    box-shadow: 0 0 6px #AAA inset;
+  }
+
+  &__text{
+    padding: .25em 0;
+    margin: .25em 0 0 0;
+    font-size: 1rem;
+    text-align: center;
+    text-transform: capitalize;
+  }
+  &__value{
+    border: none;
+    outline: none;
+    width: 100%;
+    margin: 0;
+    padding: .25em .5em;
+    text-align: center;
+    background: #AAA;
+    color: white;
+    box-shadow: 0 0 3px #EEE inset;
+    -moz-appearance:textfield;
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button{
+      appearance: none;
+    }
+  }
+}
