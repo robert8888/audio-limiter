@@ -52,7 +52,9 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
         this.sampleEnvelope = new Array(channelCount || outputChannelCount[0]).fill(0);
     }
 
-    private getEnvelope(output: Float32Array, attackTime: number, releaseTime: number, sampleEnvelope = 0): Float32Array{
+    private getEnvelope(output: Float32Array, attackTime: number, releaseTime: number, channel: number): Float32Array
+    {
+        let sampleEnvelope = this.sampleEnvelope[channel];
         const envelope = new Float32Array(output.length);
 
         const attackGain = Math.exp(-1 / (contextSampleRate * attackTime));
@@ -69,6 +71,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
             envelope[i] = sampleEnvelope;
         }
 
+        this.sampleEnvelope[channel] = sampleEnvelope;
         return envelope;
     }
 
@@ -90,7 +93,7 @@ export default class LimiterWorkletProcessor extends AudioWorkletProcessor imple
                 output[channel][i] = input[channel][i] * preGainAmp;
             }
 
-            const envelope = this.getEnvelope(output[channel], attack, release, this.sampleEnvelope[0]);
+            const envelope  = this.getEnvelope(output[channel], attack, release, channel);
 
             if(this.time > 0){
                 for(let i = 0; i < length; i++){
